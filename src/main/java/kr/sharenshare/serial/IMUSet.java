@@ -52,6 +52,6 @@ public class IMUSet {
             builder.append(" ");
         }
 
-        return builder.toString().trim();
+        return builder.toString().trim() + "\r\n";
     }
 }
