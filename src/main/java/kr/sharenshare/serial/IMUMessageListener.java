@@ -4,7 +4,13 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortEvent;
 import com.fazecast.jSerialComm.SerialPortMessageListener;
 
-public class MessageListener implements SerialPortMessageListener {
+public class IMUMessageListener implements SerialPortMessageListener {
+
+    private final IMUSet imuSet;
+
+    public IMUMessageListener(IMUSet imuSet) {
+        this.imuSet = imuSet;
+    }
 
     @Override
     public byte[] getMessageDelimiter() {
@@ -24,19 +30,16 @@ public class MessageListener implements SerialPortMessageListener {
     @Override
     public void serialEvent(SerialPortEvent serialPortEvent) {
         byte[] delimitedMessage = serialPortEvent.getReceivedData();
-        System.out.println(new String(delimitedMessage).trim());
+        String message = new String(delimitedMessage).trim();
 
-//        for (byte b : delimitedMessage) {
-//            System.out.print((int)b);
-//            System.out.print("(");
-//            if (b != 10) {
-//                System.out.print((char)b);
-//            }
-//            System.out.print(")");
-//            System.out.print(" ");
-//        }
-//
-//        System.out.println();
+        if (message.split(",").length == 10) {
+            MeasurementMessage mm = new MeasurementMessage(message);
+            imuSet.updateValue(mm.getIndex(), mm.getQuerternion(), mm.getAcceleration());
+        } else {
+            System.out.println("Unknown Message: " + message);
+        }
+
+
     }
 
 }
