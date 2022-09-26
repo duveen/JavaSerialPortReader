@@ -27,19 +27,23 @@ public class ServerExecutable implements Runnable {
 
     @Override
     public void run() {
-        try {
-            this.socket = this.serverSocket.accept();
+        while (true) {
+            System.out.println("Accept Ready");
+            try {
+                this.socket = this.serverSocket.accept();
 
-            BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
-            while (socket.isConnected()) {
-                Thread.sleep(50);
+                BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
+                while (socket.isConnected()) {
+                    Thread.sleep(50);
 
-                String message = imuSet.printQuerternions();
-                bos.write(message.getBytes(StandardCharsets.UTF_8));
-                bos.flush();
+                    String message = imuSet.printQuerternions();
+                    bos.write(message.getBytes(StandardCharsets.UTF_8));
+                    bos.flush();
+                }
+
+            } catch (Exception e) {
+                System.out.println("Socket Closed");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
