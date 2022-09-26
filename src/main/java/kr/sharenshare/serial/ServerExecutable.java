@@ -34,7 +34,7 @@ public class ServerExecutable implements Runnable {
 
                 BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
                 while (socket.isConnected()) {
-                    Thread.sleep(50);
+                    Thread.sleep(20);
 
                     String message = imuSet.printQuerternions();
                     bos.write(message.getBytes(StandardCharsets.UTF_8));
